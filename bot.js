@@ -22,17 +22,25 @@ client.on('connected', onConnectedHandler);
 client.connect();
 
 // Called every time a message comes in
-function onMessageHandler (target, context, msg, self) {
+function onMessageHandler (channel, user, msg, self) {
   if (self) { return; } // Ignore messages from the bot
 
   // Remove whitespace from chat message
   const commandName = msg.trim();
   //!echo say this!
   if(commandName === "!helloworld") {
-    client.say(target, "Hello world!");
+    client.say(channel, "Hello world!");
   } else if(commandName.startsWith("!echo")) {
-    const sayText = commandName.replace("!echo ", "");
-    client.say(target, sayText);
+    if(isMod(user, channel)) {
+      const sayText = commandName.replace("!echo ", "");
+      client.say(channel, sayText);
+    }
+  } else if(commandName === "!isMod") {
+    if(isMod(user, channel)) {
+      client.say(channel, `${user.username} is a mod!`);
+    } else {
+      client.say(channel, `BOP ${user.username} is not a mod!`);
+    }
   }
 }
 
@@ -44,6 +52,5 @@ function onConnectedHandler (addr, port) {
 function isMod(user, channel) {
   let isMod = user.mod || user["user-type"] === "mod";
   let isBroadcaster = channel.slice(1) === user.username;
-  let isSquizzle = user.username === "squizzleflip";
-  return isMod || isBroadcaster || isSquizzle;
+  return isMod || isBroadcaster;
 }
