@@ -1,23 +1,39 @@
-var Sequelize = require('sequelize');
+"use strict";
+const Sequelize = require("sequelize");
 
-var users = [
-      ["John","Hancock"],
-      ["Liz","Smith"],
-      ["Ahmed","Khan"]
-    ];
-var User;
+module.exports = class Db {
+  constructor() {
+    this.sequelize = new Sequelize(
+      "database",
+      process.env.DB_USER,
+      process.env.DB_PASS,
+      {
+        host: "0.0.0.0",
+        dialect: "sqlite",
+        pool: {
+          max: 5,
+          min: 0,
+          idle: 10000
+        },
+        storage: ".data/database.sqlite"
+      }
+    );
 
-// setup a new database
-// using database credentials set in .env
-var sequelize = new Sequelize('database', process.env.DB_USER, process.env.DB_PASS, {
-  host: '0.0.0.0',
-  dialect: 'sqlite',
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  },
-    // Security note: the database is saved to the file `database.sqlite` on the local filesystem. It's deliberately placed in the `.data` directory
-    // which doesn't get copied if someone remixes the project.
-  storage: '.data/database.sqlite'
-});
+    this.sequelize
+      .authenticate()
+      .then(function(err) {
+        console.log("Connection has been established successfully.");
+        // define a new table 'users'
+        this.User = this.sequelize.define("users", {
+          username: {
+            type: Sequelize.STRING
+          },
+        });
+
+        setup();
+      })
+      .catch(function(err) {
+        console.log("Unable to connect to the database: ", err);
+      });
+  }
+};
