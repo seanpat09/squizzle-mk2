@@ -1,5 +1,5 @@
 const tmi = require("tmi.js");
-const Db = require("db.js");
+const Db = require("./db.js");
 
 // Define configuration options
 const opts = {
@@ -44,9 +44,22 @@ function onMessageHandler(channel, user, msg, self) {
     } else {
       client.say(channel, `BOP ${user.username} is not a mod!`);
     }
-  } else if (commandName.startsWith("!addUser") ){
+  } else if (commandName.startsWith("!addUser")) {
     if (isMod(user, channel)) {
-      db.User
+      const username = commandName.replace("!addUser ", "");
+      if (username) {
+        db.User.create({ username: username });
+        client.say(channel, `Added username ${username}`);
+      }
+    }
+  } else if (commandName === "!showUsers") {
+    if (isMod(user, channel)) {
+      db.User.findAll().then(users => {
+        // find all entries in the users tables
+        let userlist = users.map(user => user.username).join(", ");
+
+        client.say(channel, `List of users: ${userlist}`);
+      });
     }
   }
 }
