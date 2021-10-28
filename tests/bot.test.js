@@ -6,8 +6,8 @@ const bot = require('.././bot.js');
 
 describe('on startup', () => {
   
-  test.only('it should construct a new tmi client', () => {
-    expect(tmi.client).not.toBeCalled();
+  test.only('it should construct a new tmi client with channel configuration', () => {
+    expect(tmi.client).toBeCalledWith({"channels": ["fakechannelname"], "identity": {"password": "fakeoauthtoken", "username": "fakebotname"}});
   });
 
   test('it should set up the onMessageHandler', () => {
