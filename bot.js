@@ -1,5 +1,4 @@
 const tmi = require("tmi.js");
-const Db = require("./db.js");
 
 // Define configuration options
 const opts = {
@@ -20,8 +19,6 @@ client.on("connected", onConnectedHandler);
 // Connect to Twitch:
 client.connect();
 
-const db = new Db();
-
 // Called every time a message comes in
 function onMessageHandler(channel, user, msg, self) {
   if (self) {
@@ -30,38 +27,6 @@ function onMessageHandler(channel, user, msg, self) {
 
   // Remove whitespace from chat message
   const commandName = msg.trim();
-
-  if (commandName === "!helloworld") {
-    client.say(channel, "Hello world!");
-  } else if (commandName.startsWith("!echo")) {
-    if (isMod(user, channel)) {
-      const sayText = commandName.replace("!echo ", "");
-      client.say(channel, sayText);
-    }
-  } else if (commandName === "!isMod") {
-    if (isMod(user, channel)) {
-      client.say(channel, `${user.username} is a mod!`);
-    } else {
-      client.say(channel, `BOP ${user.username} is not a mod!`);
-    }
-  } else if (commandName.startsWith("!addUser")) {
-    if (isMod(user, channel)) {
-      const username = commandName.replace("!addUser ", "");
-      if (username) {
-        db.User.create({ username: username });
-        client.say(channel, `Added username ${username}`);
-      }
-    }
-  } else if (commandName === "!showUsers") {
-    if (isMod(user, channel)) {
-      db.User.findAll().then(users => {
-        // find all entries in the users tables
-        let userlist = users.map(user => user.username).join(", ");
-
-        client.say(channel, `List of users: ${userlist}`);
-      });
-    }
-  }
 }
 
 // Called every time the bot connects to Twitch chat

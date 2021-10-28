@@ -4,7 +4,8 @@
   "description": "A simple Twitch chat bot",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node bot.js",
+    "test": "jest"
   },
   "dependencies": {
     "tmi.js": "^1.8.5",
