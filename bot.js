@@ -9,6 +9,8 @@ const opts = {
   channels: [process.env.CHANNEL_NAME]
 };
 
+console.log("HERERERE>>>>>>>>>>>>>>>>");
+
 // Create a client with our options
 const client = new tmi.client(opts);
 
