@@ -2,25 +2,28 @@ const tmi = require("tmi.js");
 jest.mock('tmi.js');
 
 describe('on startup', () => {
-  
+  afterEach(() => {
+    jest.clearAllMocks();
+  })
   test('it should construct a new tmi client with channel configuration', () => {
     const bot = require('.././bot.js');
     expect(tmi.client).toBeCalledWith({"channels": ["fakechannelname"], "identity": {"password": "fakeoauthtoken", "username": "fakebotname"}});
   });
 
-  test.only('it should set up the onMessageHandler', () => {
+  test('it should set up the handlers', () => {
     const mockClient = new MockClient();
     tmi.client = jest.fn(() => mockClient);
     const bot = require('.././bot.js');
-    expect(mockClient.on).toBeCalledWith("message");
-  });
-  
-  test('it should set up the onConnectedHandler', () => {
-    expect(true).toBe(false);
+    expect(mockClient.on).toBeCalledTimes(2);
+    expect(mockClient.on).toHaveBeenNthCalledWith(1, "message", expect.anything());
+    expect(mockClient.on).toHaveBeenNthCalledWith(2, "connected", expect.anything());
   });
   
   test('it should connect the tmi client', () => {
-    expect(true).toBe(false);
+    const mockClient = new MockClient();
+    tmi.client = jest.fn(() => mockClient);
+    const bot = require('.././bot.js');
+    expect(mockClient.connect).toBeCalledTimes(1);
   });
 })
 
