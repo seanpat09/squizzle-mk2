@@ -1,5 +1,5 @@
 {
-  "name": "twitch-chatbot-tutorial",
+  "name": "squizzle-legion",
   "version": "0.0.1",
   "description": "A simple Twitch chat bot",
   "main": "bot.js",
@@ -22,5 +22,8 @@
     "twitch",
     "chatbots",
     "irc"
-  ]
+  ],
+  "devDependencies": {
+    "jest": "^27.3.1"
+  }
 }
