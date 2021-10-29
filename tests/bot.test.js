@@ -1,8 +1,8 @@
 const tmi = require("tmi.js");
 jest.mock("tmi.js");
 
-const Channel = require("channel.js");
-jest.mock("channel.js");
+const Channel = require(".././channel.js");
+jest.mock(".././channel.js");
 
 const mockedChannels = {};
 
@@ -59,10 +59,11 @@ describe("Bot", () => {
       bot = require(".././bot.js");
     });
 
-    test("it should only pass messages to the channel they were said in", () => {
+    test.only("it should only pass messages to the channel they were said in", () => {
         mockClient.mockMessage("squizzleflip", {}, "!ping", false);
-        expect(tmi.client).toBeCalledWith();
-    })
+        expect(Channel.mock.instances[0].messageHandler.mock.calls.length).toBe(1);
+        expect(Channel.mock.instances[1].messageHandler.mock.calls.length).toBe(0);
+    });
   });
 });
 
@@ -79,12 +80,5 @@ class MockClient {
   
   mockMessage(channel, user, msg, self) {
     this.eventHandlers.message(channel, user, msg, self);
-  }
-}
-
-class MockChannel{
-  constructor(channelName, client) {
-    this.handleMessage = jest.fn();
-    mockedChannels[channelName] = this;
   }
 }
