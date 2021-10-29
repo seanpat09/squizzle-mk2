@@ -4,6 +4,8 @@ jest.mock("tmi.js");
 const Channel = require("channel.js");
 jest.mock("channel.js");
 
+const mockedChannels = {};
+
 describe("Bot", () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -80,12 +82,9 @@ class MockClient {
   }
 }
 
-class MockChannelConstructor {
-  constructor() {
-
+class MockChannel{
+  constructor(channelName, client) {
+    this.handleMessage = jest.fn();
+    mockedChannels[channelName] = this;
   }
-}
-
-class MockChannel(){
-
 }
