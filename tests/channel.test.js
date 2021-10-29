@@ -15,7 +15,7 @@ describe("Channel", () => {
         const aChannel = new Channel(MOCK_CHANNEL_NAME, MOCK_CLIENT);
         
         expect(aChannel.name).toBe(MOCK_CHANNEL_NAME);
-        expect(aChannel.client).tBe(MOCK_CLIENT);
+        expect(aChannel.client).toBe(MOCK_CLIENT);
       });
     })
 
