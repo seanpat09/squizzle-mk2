@@ -3,7 +3,7 @@ const Channel = require('./channel.js');
 
 const channelNames = [
   "squizzleflip",
-  "squizzle_mk1"
+  "squizzle_mk2"
 ];
 
 // Define configuration options
@@ -35,6 +35,11 @@ function onMessageHandler(channel, user, msg, self) {
     return;
   } // Ignore messages from the bot
 
+  channels.forEach((c) => {
+    if(channel.slice(1) === c.name ) {
+      c.handleMessage(user, msg);  
+    }
+  })
   // Remove whitespace from chat message
   const commandName = msg.trim();
 }

@@ -15,7 +15,7 @@ describe("Bot", () => {
     describe("channel registration", () => {
       test("it should construct new tmi client with channel configuration for each channel", () => {
         const bot = require(".././bot.js");
-        const expectedChannels = ["squizzleflip", "squizzle_mk1"];
+        const expectedChannels = ["squizzleflip", "squizzle_mk2"];
         const expectedOptions = {
           channels: expectedChannels,
           identity: { password: "fakeoauthtoken", username: "fakebotname" }
@@ -60,9 +60,12 @@ describe("Bot", () => {
     });
 
     test.only("it should only pass messages to the channel they were said in", () => {
-        mockClient.mockMessage("squizzleflip", {}, "!ping", false);
-        expect(Channel.mock.instances[0].messageHandler.mock.calls.length).toBe(1);
-        expect(Channel.mock.instances[1].messageHandler.mock.calls.length).toBe(0);
+      Channel.mock.instances[0].handleMessage.name = "squizzleflip";
+      Channel.mock.instances[0].handleMessage.name = "squizzle_mk2";
+
+      mockClient.mockMessage("#squizzleflip", {}, "!ping", false);
+      expect(Channel.mock.instances[0].handleMessage.mock.calls.length).toBe(1);
+      expect(Channel.mock.instances[1].handleMessage.mock.calls.length).toBe(0);
     });
   });
 });
