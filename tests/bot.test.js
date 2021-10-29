@@ -48,15 +48,36 @@ describe("Bot", () => {
   });
   
   describe("message handling", () => {
+    let bot;
+    beforeEach(() => {
+      bot = require(".././bot.js");
+    });
+
     test("it should only pass messages to the channel they were said in", () => {
-    
+        const expectedChannels = ["squizzleflip", "squizzle_mk1"];
+        const expectedOptions = {
+          channels: expectedChannels,
+          identity: { password: "fakeoauthtoken", username: "fakebotname" }
+        };
+        expect(tmi.client).toBeCalledWith();
     })
   });
 });
 
 class MockClient {
   constructor() {
-    this.on = jest.fn(() => console.log("ON WAS CALLED"));
+    this.on = jest.fn(
+      (eventName, handler) => {
+        this.eventHandlers = this.eventHandlers || {};
+        this.eventHandlers[eventName] = handler;
+      }
+    );
     this.connect = jest.fn();
   }
+  
+  mockMessage(channel, user, msg, self) {
+    this.eventHandlers[channel]()
+  }
+  
+  
 }
