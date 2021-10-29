@@ -1,4 +1,10 @@
 const tmi = require("tmi.js");
+const Channel = require('./channel.js');
+
+const channelNames = [
+  "squizzleflip",
+  "squizzle_mk1"
+];
 
 // Define configuration options
 const opts = {
@@ -6,11 +12,15 @@ const opts = {
     username: process.env.BOT_USERNAME,
     password: process.env.OAUTH_TOKEN
   },
-  channels: [process.env.CHANNEL_NAME]
+  channels: channelNames
 };
 
 // Create a client with our options
 const client = new tmi.client(opts);
+
+let channels = channelNames.map((name) => {
+  return new Channel(name, client);
+})
 
 // Register our event handlers (defined below)
 client.on("message", onMessageHandler);
