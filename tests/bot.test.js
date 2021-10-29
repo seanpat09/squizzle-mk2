@@ -7,9 +7,7 @@ jest.mock(".././channel.js");
 const mockedChannels = {};
 
 describe("Bot", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+
 
   describe("on startup", () => {
     describe("channel registration", () => {
@@ -20,7 +18,7 @@ describe("Bot", () => {
           channels: expectedChannels,
           identity: { password: "fakeoauthtoken", username: "fakebotname" }
         };
-        expect(tmi.client).toBeCalledWith();
+        expect(tmi.client).toBeCalledWith(expectedOptions);
       });
     });
 
@@ -59,9 +57,9 @@ describe("Bot", () => {
       bot = require(".././bot.js");
     });
 
-    test.only("it should only pass messages to the channel they were said in", () => {
-      Channel.mock.instances[0].handleMessage.name = "squizzleflip";
-      Channel.mock.instances[0].handleMessage.name = "squizzle_mk2";
+    test("it should only pass messages to the channel they were said in", () => {
+      Channel.mock.instances[0].name = "squizzleflip";
+      Channel.mock.instances[1].name = "squizzle_mk2";
 
       mockClient.mockMessage("#squizzleflip", {}, "!ping", false);
       expect(Channel.mock.instances[0].handleMessage.mock.calls.length).toBe(1);
