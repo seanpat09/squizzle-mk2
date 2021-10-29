@@ -1,6 +1,10 @@
 "use strict";
 
 module.export = class Channel {
-  constructor() {
+  constructor(channelName, client) {
+  }
+  
+  handleMessage(userstate, msg) {
+  
   }
 }
