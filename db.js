@@ -4,7 +4,7 @@ const Sequelize = require("sequelize");
 module.exports = class Db {
   constructor(filename) {
     this.STRING_TYPE = Sequelize.STRING;
-    
+
     this.sequelize = new Sequelize(
       "database",
       process.env.DB_USER,
@@ -23,24 +23,23 @@ module.exports = class Db {
 
     this.sequelize
       .authenticate()
-      .then((err) => {
+      .then(err => {
         console.log("Connection has been established successfully.");
-//         // define a new table 'users'
-//         this.User = this.sequelize.define("users", {
-//           username: {
-//             type: Sequelize.STRING
-//           },
-//         });
-      
-//         this.User.sync()
+        //         // define a new table 'users'
+        //         this.User = this.sequelize.define("users", {
+        //           username: {
+        //             type: Sequelize.STRING
+        //           },
+        //         });
+
+        //         this.User.sync()
       })
-      .catch((err) => {
+      .catch(err => {
         console.log("Unable to connect to the database: ", err);
       });
   }
-  
-  defineTable(propertyName, tableName) {
-    
+
+  defineTable(propertyName, tableName, columns) {
     this.sequelize.define("villagers", {
       name: {
         type: Sequelize.STRING
@@ -48,5 +47,16 @@ module.exports = class Db {
     });
 
     this.Villagers.sync();
+  }
+
+  create(tableName, row) {
+    this[tableName].create(row);
+  }
+
+  resetTable(tableName) {
+    this[tableName].destroy({
+      where: {},
+      truncate: true
+    });
   }
 };

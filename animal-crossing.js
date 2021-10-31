@@ -7,18 +7,21 @@ module.exports = class AnimalCrossing {
     this.client = client;
     this.db = db;
 
-    this.Villagers = this.db.defineTable("Villager", "villagers");
-    
+    this.Villagers = this.db.defineTable("Villager", "villagers", {
+      name: {
+        type: this.db.STRING_TYPE
+      }
+    });
   }
 
   handleMessage(channel, userstate, msg) {
     if (msg === "!startvillagerhunt") {
       this._startVillagerHunt();
-    } else if (msg === "!showvillagers") {
+    } else if (msg === "!addvillager") {
       this._addVillager(channel, name);
-    } else if (msg.startsWith("!addvillager")) {
-      this._removeVillager(channel, name);
     } else if (msg.startsWith("!removevillager")) {
+      this._removeVillager(channel, name);
+    } else if (msg.startsWith("!showVillagers")) {
       this._viewVillagers(channel);
     }
   }
@@ -27,12 +30,12 @@ module.exports = class AnimalCrossing {
     this.db.User.destroy({
       where: {},
       truncate: true
-    })
+    });
   }
 
   _addVillager(target, name) {
-    // this.db.get("villagers").push(name).write();
-    // this.viewVillagers(target);
+    this.db.create("Villager", { name: name });
+    this.viewVillagers(target);
   }
 
   _removeVillager(target, name) {
