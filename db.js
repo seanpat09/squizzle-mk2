@@ -3,6 +3,8 @@ const Sequelize = require("sequelize");
 
 module.exports = class Db {
   constructor(filename) {
+    this.STRING_TYPE = Sequelize.STRING;
+    
     this.sequelize = new Sequelize(
       "database",
       process.env.DB_USER,
@@ -35,5 +37,16 @@ module.exports = class Db {
       .catch((err) => {
         console.log("Unable to connect to the database: ", err);
       });
+  }
+  
+  defineTable(propertyName, tableName) {
+    
+    this.sequelize.define("villagers", {
+      name: {
+        type: Sequelize.STRING
+      }
+    });
+
+    this.Villagers.sync();
   }
 };
