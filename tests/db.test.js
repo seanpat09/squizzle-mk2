@@ -1,10 +1,10 @@
-const Db = require("db.js");
+const Db = require(".././db.js");
 
 const Sequelize = require("sequelize");
 jest.mock("sequelize");
 
 describe("Db", () => {
-  let mockClient;
+  let db;
 
     afterEach(() => {
       jest.clearAllMocks();
@@ -12,8 +12,9 @@ describe("Db", () => {
 
     describe("constructor", () => {
       test("constructor registration should instantiate with a client", () => {
-        expect(aChannel.client).toBe(MOCK_CLIENT);
+        db = new Db(".test/testfile");
+        Sequelize.mock.instances[0].authenticate = jest.fn().mockResolvedValue();
+        expect(Sequelize).toBeCalledWith();
       });
-    })
-
+    });
 })
