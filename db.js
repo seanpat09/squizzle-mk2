@@ -5,7 +5,7 @@ module.exports = class Db {
   constructor(filename) {
     this.STRING_TYPE = Sequelize.STRING;
 
-    if(!filename) {
+    if (!filename) {
       return;
     }
     this.sequelize = new Sequelize(
@@ -57,15 +57,14 @@ module.exports = class Db {
       truncate: true
     });
   }
-  
-  async findAll(tableProperty){
-    await rows = this[tableProperty].then(rows => {
-        // find all entries in the users tables
-        let userlist = users.map(user => user.username).join(", ");
 
-        client.say(channel, `List of users: ${userlist}`);
-      });
-    console.log(`>>>> rows ${JSON.stringify(rows)}`` )
-    return rows;
+  async findAll(tableProperty) {
+    return await this[tableProperty].findAll().then(rows => {
+      return rows
+    });
+  }
+  
+  async deleteOne(tableProperty, objectToFilter) {
+    this[tableProperty].findOne({ where: objectToFind }).then(row.;
   }
 };

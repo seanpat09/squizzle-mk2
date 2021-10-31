@@ -34,7 +34,7 @@ module.exports = class AnimalCrossing {
 
   _startVillagerHunt() {
     this.db.resetTable("Villager");
-    _intializeVillagerTable();
+    this._intializeVillagerTable();
   }
 
   _addVillager(channelName, name) {
@@ -49,12 +49,13 @@ module.exports = class AnimalCrossing {
   }
 
   async _viewVillagers(channelName) {
-    let villagers = this.db.findAll("Villager");
+    let villagers = await this.db.findAll("Villager");
     console.log(">>>>>>>", JSON.stringify(villagers));
-    // let villagerList = villagers.map(v => v.name).join(", ");
-    // this.client.say(
-    //   channelName,
-    //   `So far we found the following villagers: $villagerList}`
-    // );
+    let villagerList = villagers.map(v => v.name).join(", ");
+
+    this.client.say(
+      channelName,
+      `So far we found the following villagers: ${villagerList}`
+    );
   }
 };
