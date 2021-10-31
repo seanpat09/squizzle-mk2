@@ -2,7 +2,7 @@
 const Sequelize = require("sequelize");
 
 module.exports = class Db {
-  constructor() {
+  constructor(filename) {
     this.sequelize = new Sequelize(
       "database",
       process.env.DB_USER,
@@ -15,7 +15,7 @@ module.exports = class Db {
           min: 0,
           idle: 10000
         },
-        storage: ".data/database.sqlite"
+        storage: filename
       }
     );
 
