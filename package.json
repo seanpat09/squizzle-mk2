@@ -2,9 +2,9 @@
   "name": "squizzle-legion",
   "version": "0.0.1",
   "description": "A simple Twitch chat bot",
-  "main": "bot.js",
+  "main": "main.js",
   "scripts": {
-    "start": "node bot.js",
+    "start": "node main.js",
     "test": "jest"
   },
   "dependencies": {
