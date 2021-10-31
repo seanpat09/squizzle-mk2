@@ -32,9 +32,7 @@ module.exports = class Bot {
       return;
     } // Ignore messages from the bot
 
-    console.log(">>>>>>>>>>>>>onMessageHandler")
     this.channels.forEach(c => {
-      console.log(channel, c.channelName);
       if (channel === c.channelName) {
         c.handleMessage(user, msg);
       }
