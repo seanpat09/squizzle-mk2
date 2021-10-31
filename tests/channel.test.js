@@ -14,7 +14,7 @@ describe("Channel", () => {
       test("registration should instantiate with a client", () => {
         const aChannel = new Channel(MOCK_CHANNEL_NAME, MOCK_CLIENT);
         
-        expect(aChannel.name).toBe(MOCK_CHANNEL_NAME);
+        expect(aChannel.channelName).toBe(MOCK_CHANNEL_NAME);
         expect(aChannel.client).toBe(MOCK_CLIENT);
       });
     })

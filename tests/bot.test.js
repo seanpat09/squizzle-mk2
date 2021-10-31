@@ -4,11 +4,7 @@ jest.mock("tmi.js");
 const Channel = require(".././channel.js");
 jest.mock(".././channel.js");
 
-const mockedChannels = {};
-
 describe("Bot", () => {
-
-
   describe("on startup", () => {
     describe("channel registration", () => {
       test("it should construct new tmi client with channel configuration for each channel", () => {
@@ -48,13 +44,12 @@ describe("Bot", () => {
   });
   
   describe("message handling", () => {
-    let bot;
     let mockClient;
     beforeEach(() => {
       mockClient = new MockClient();
       tmi.client = jest.fn(() => mockClient);
       
-      bot = require(".././bot.js");
+      require(".././bot.js");
     });
 
     test("it should only pass messages to the channel they were said in", () => {

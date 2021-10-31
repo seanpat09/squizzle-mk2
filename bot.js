@@ -1,42 +1,44 @@
 const tmi = require("tmi.js");
 const Channel = require('./channel.js');
 
-const channelNames = [
+module.exports = class Bot {
+  constructor() {
+    this.channelNames = [
   "squizzleflip",
   "squizzle_mk2"
 ];
-
-// Define configuration options
-const opts = {
+    
+    this.opts = {
   identity: {
     username: process.env.BOT_USERNAME,
     password: process.env.OAUTH_TOKEN
   },
-  channels: channelNames
+  channels: this.channelNames
 };
-
-// Create a client with our options
-const client = new tmi.client(opts);
-
-let channels = channelNames.map((name) => {
-  return new Channel(name, client);
+    
+    this.client = new tmi.client(this.opts);
+    
+    this.channels = this.channelNames.map((name) => {
+  return new Channel(name, this.client);
 })
-
-// Register our event handlers (defined below)
-client.on("message", onMessageHandler);
-client.on("connected", onConnectedHandler);
+    
+    this.client.on("message", this.onMessageHandler);
+this.client.on("connected", this.onConnectedHandler);
 
 // Connect to Twitch:
-client.connect();
+this.client.connect();
+  }
+  
+
 
 // Called every time a message comes in
-function onMessageHandler(channel, user, msg, self) {
+onMessageHandler(channel, user, msg, self) {
   if (self) {
     return;
   } // Ignore messages from the bot
 
   channels.forEach((c) => {
-    if(channel.slice(1) === c.name ) {
+    if(channel.slice(1) === c.channelName ) {
       c.handleMessage(user, msg);  
     }
   })
@@ -45,12 +47,13 @@ function onMessageHandler(channel, user, msg, self) {
 }
 
 // Called every time the bot connects to Twitch chat
-function onConnectedHandler(addr, port) {
+onConnectedHandler(addr, port) {
   console.log(`* Connected to ${addr}:${port}`);
 }
 
-function isMod(user, channel) {
+isMod(user, channel) {
   let isMod = user.mod || user["user-type"] === "mod";
   let isBroadcaster = channel.slice(1) === user.username;
   return isMod || isBroadcaster;
+}
 }
