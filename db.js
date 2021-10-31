@@ -59,7 +59,13 @@ module.exports = class Db {
   }
   
   async findAll(tableProperty){
-    const rows = await this[tableProperty].findAll();
+    await rows = this[tableProperty].then(rows => {
+        // find all entries in the users tables
+        let userlist = users.map(user => user.username).join(", ");
+
+        client.say(channel, `List of users: ${userlist}`);
+      });
+    console.log(`>>>> rows ${JSON.stringify(rows)}`` )
     return rows;
   }
 };

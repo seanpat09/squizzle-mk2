@@ -12,17 +12,20 @@ module.exports = class AnimalCrossing {
   handleMessage(channelName, userstate, msg) {
     if (msg === "!startvillagerhunt") {
       this._startVillagerHunt();
-    } else if (msg === "!addvillager") {
-      this._addVillager(channelName, name);
+    } else if (msg.startsWith("!addvillager")) {
+      const villagerName = msg.replace("!addvillager ", "").trim();
+      if (villagerName !== "") {
+        this._addVillager(channelName, villagerName);
+      }
     } else if (msg.startsWith("!removevillager")) {
       this._removeVillager(channelName, name);
     } else if (msg.startsWith("!showvillagers")) {
       this._viewVillagers(channelName);
     }
   }
-  
+
   _intializeVillagerTable() {
-        this.Villagers = this.db.defineTable("Villager", "villagers", {
+    this.db.defineTable("Villager", "villagers", {
       name: {
         type: this.db.STRING_TYPE
       }
@@ -31,6 +34,7 @@ module.exports = class AnimalCrossing {
 
   _startVillagerHunt() {
     this.db.resetTable("Villager");
+    _intializeVillagerTable();
   }
 
   _addVillager(channelName, name) {
