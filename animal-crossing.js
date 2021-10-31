@@ -27,10 +27,7 @@ module.exports = class AnimalCrossing {
   }
 
   _startVillagerHunt() {
-    this.db.User.destroy({
-      where: {},
-      truncate: true
-    });
+    this.db.resetTable("villagers");
   }
 
   _addVillager(target, name) {
@@ -44,7 +41,9 @@ module.exports = class AnimalCrossing {
     // this.viewVillagers(target)
   }
 
-  _viewVillagers(target) {
+  async _viewVillagers(target) {
+    let villagers = this.db.findAll("Villager");
+    console.log(JSON.stringify(villagers));
     // let villagers = this.db.get("villagers").value();
     // this.client.say(
     //   target,

@@ -49,14 +49,19 @@ module.exports = class Db {
     this.Villagers.sync();
   }
 
-  create(tableName, row) {
-    this[tableName].create(row);
+  create(tableProperty, row) {
+    this[tableProperty].create(row);
   }
 
-  resetTable(tableName) {
-    this[tableName].destroy({
+  resetTable(tableProperty) {
+    this[tableProperty].destroy({
       where: {},
       truncate: true
     });
+  }
+  
+  async findAll(tableProperty){
+    const rows = await this[tableProperty].findAll();
+    return rows;
   }
 };

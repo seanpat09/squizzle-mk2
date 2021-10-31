@@ -1,6 +1,7 @@
 "use strict";
 
 module.exports = class Channel {
+  static ANIMAL_CROSSING;
   constructor(channelName, client) {
     this.channelName = channelName;
     this.client = client;
@@ -9,10 +10,12 @@ module.exports = class Channel {
   
   handleMessage(userstate, msg) {
     this.client.say(this.channelName, "squizzle bot online.")
+    
   }
   
   enableAddOn(addon) {
     this.enabledAddOns.add(addon);
+    
     return this;
   }
 }
