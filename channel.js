@@ -19,7 +19,6 @@ module.exports = class Channel {
     if(msg === "!ping") {
       this.client.say(this.channelName, "squizzle bot online.");
     }
-    console.log(this.addOns);
     this.addOns.forEach(addOn => addOn.handleMessage(this.channelName, userstate, msg));
   }
 

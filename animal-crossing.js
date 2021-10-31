@@ -6,12 +6,7 @@ module.exports = class AnimalCrossing {
   constructor(client, db) {
     this.client = client;
     this.db = db;
-
-    this.Villagers = this.db.defineTable("Villager", "villagers", {
-      name: {
-        type: this.db.STRING_TYPE
-      }
-    });
+    this._intializeVillagerTable();
   }
 
   handleMessage(channelName, userstate, msg) {
@@ -25,9 +20,17 @@ module.exports = class AnimalCrossing {
       this._viewVillagers(channelName);
     }
   }
+  
+  _intializeVillagerTable() {
+        this.Villagers = this.db.defineTable("Villager", "villagers", {
+      name: {
+        type: this.db.STRING_TYPE
+      }
+    });
+  }
 
   _startVillagerHunt() {
-    this.db.resetTable("villagers");
+    this.db.resetTable("Villager");
   }
 
   _addVillager(channelName, name) {
@@ -44,10 +47,10 @@ module.exports = class AnimalCrossing {
   async _viewVillagers(channelName) {
     let villagers = this.db.findAll("Villager");
     console.log(">>>>>>>", JSON.stringify(villagers));
-    let villagerList = villagers.map(v => v.name).join(", ");
-    this.client.say(
-      channelName,
-      `So far we found the following villagers: $villagerList}`
-    );
+    // let villagerList = villagers.map(v => v.name).join(", ");
+    // this.client.say(
+    //   channelName,
+    //   `So far we found the following villagers: $villagerList}`
+    // );
   }
 };

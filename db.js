@@ -43,12 +43,7 @@ module.exports = class Db {
   }
 
   defineTable(propertyName, tableName, columns) {
-    this[propertyName] = this.sequelize.define("villagers", {
-      name: {
-        type: Sequelize.STRING
-      }
-    });
-
+    this[propertyName] = this.sequelize.define(tableName, columns);
     this[propertyName].sync();
   }
 
