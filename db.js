@@ -5,6 +5,9 @@ module.exports = class Db {
   constructor(filename) {
     this.STRING_TYPE = Sequelize.STRING;
 
+    if(!filename) {
+      return;
+    }
     this.sequelize = new Sequelize(
       "database",
       process.env.DB_USER,
@@ -40,13 +43,13 @@ module.exports = class Db {
   }
 
   defineTable(propertyName, tableName, columns) {
-    this.sequelize.define("villagers", {
+    this[propertyName] = this.sequelize.define("villagers", {
       name: {
         type: Sequelize.STRING
       }
     });
 
-    this.Villagers.sync();
+    this[propertyName].sync();
   }
 
   create(tableProperty, row) {

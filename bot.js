@@ -18,7 +18,7 @@ module.exports = class Bot {
 
     this.channelsByName = new Map();
     this.channels = this.channelNames.map(name => {
-      let aChannel = new Channel(name, this.client);
+      let aChannel = new Channel(name, this.client, `.data/${name.slice(1)}`);
       this.channelsByName.set(name, aChannel);
       return aChannel;
     });

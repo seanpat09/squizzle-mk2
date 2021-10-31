@@ -15,13 +15,15 @@ module.exports = class AnimalCrossing {
   }
 
   handleMessage(channel, userstate, msg) {
+    console.log("villager msg");
     if (msg === "!startvillagerhunt") {
       this._startVillagerHunt();
     } else if (msg === "!addvillager") {
       this._addVillager(channel, name);
     } else if (msg.startsWith("!removevillager")) {
       this._removeVillager(channel, name);
-    } else if (msg.startsWith("!showVillagers")) {
+    } else if (msg.startsWith("!showvillagers")) {
+      console.log('here');
       this._viewVillagers(channel);
     }
   }
