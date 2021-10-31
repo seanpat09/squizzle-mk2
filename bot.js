@@ -59,6 +59,7 @@ module.exports = class Bot {
   }
   
   configureAddOns() {
-    squizzleflip
+    this.channelsByName.get("squizzleflip")
+      .enableAddOn("animalcrossing");
   }
 };
