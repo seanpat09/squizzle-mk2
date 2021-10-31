@@ -1,3 +1,4 @@
+"use strict"
 const tmi = require("tmi.js");
 const Channel = require("./channel.js");
 
@@ -15,9 +16,14 @@ module.exports = class Bot {
 
     this.client = new tmi.client(this.opts);
 
+    this.channelsByName = new Map();
     this.channels = this.channelNames.map(name => {
-      return new Channel(name, this.client);
+      let aChannel = new Channel(name, this.client);
+      this.channelsByName.set(name, aChannel);
+      return aChannel 
     });
+
+    this.configureAddons();
 
     this.client.on("message", this.onMessageHandler.bind(this));
     this.client.on("connected", this.onConnectedHandler);
@@ -50,5 +56,9 @@ module.exports = class Bot {
     let isMod = user.mod || user["user-type"] === "mod";
     let isBroadcaster = channel.slice(1) === user.username;
     return isMod || isBroadcaster;
+  }
+  
+  configureAddOns() {
+    squizzleflip
   }
 };

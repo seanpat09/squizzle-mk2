@@ -9,4 +9,6 @@ module.exports = class Channel {
   handleMessage(userstate, msg) {
     this.client.say(this.channelName, "squizzle bot online.")
   }
+  
+  add
 }
