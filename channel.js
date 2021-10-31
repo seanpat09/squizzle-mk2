@@ -20,7 +20,7 @@ module.exports = class Channel {
       this.client.say(this.channelName, "squizzle bot online.");
     }
     console.log(this.addOns);
-    this.addOns.forEach(addOn => addOn.handleMessage(userstage, msg));
+    this.addOns.forEach(addOn => addOn.handleMessage(this.channelName, userstate, msg));
   }
 
   enableAddOn(addOn) {

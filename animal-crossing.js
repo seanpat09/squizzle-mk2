@@ -14,17 +14,15 @@ module.exports = class AnimalCrossing {
     });
   }
 
-  handleMessage(channel, userstate, msg) {
-    console.log("villager msg");
+  handleMessage(channelName, userstate, msg) {
     if (msg === "!startvillagerhunt") {
       this._startVillagerHunt();
     } else if (msg === "!addvillager") {
-      this._addVillager(channel, name);
+      this._addVillager(channelName, name);
     } else if (msg.startsWith("!removevillager")) {
-      this._removeVillager(channel, name);
+      this._removeVillager(channelName, name);
     } else if (msg.startsWith("!showvillagers")) {
-      console.log('here');
-      this._viewVillagers(channel);
+      this._viewVillagers(channelName);
     }
   }
 
@@ -32,9 +30,9 @@ module.exports = class AnimalCrossing {
     this.db.resetTable("villagers");
   }
 
-  _addVillager(target, name) {
+  _addVillager(channelName, name) {
     this.db.create("Villager", { name: name });
-    this.viewVillagers(target);
+    this._viewVillagers(channelName);
   }
 
   _removeVillager(target, name) {
@@ -43,13 +41,13 @@ module.exports = class AnimalCrossing {
     // this.viewVillagers(target)
   }
 
-  async _viewVillagers(target) {
+  async _viewVillagers(channelName) {
     let villagers = this.db.findAll("Villager");
-    console.log(JSON.stringify(villagers));
-    // let villagers = this.db.get("villagers").value();
-    // this.client.say(
-    //   target,
-    //   `So far we found the following villagers: ${villagers.join(", ")}`
-    // );
+    console.log(">>>>>>>", JSON.stringify(villagers));
+    let villagerList = villagers.map(v => v.name).join(", ");
+    this.client.say(
+      channelName,
+      `So far we found the following villagers: $villagerList}`
+    );
   }
 };
