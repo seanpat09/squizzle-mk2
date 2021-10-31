@@ -28,14 +28,6 @@ module.exports = class Db {
       .authenticate()
       .then(err => {
         console.log("Connection has been established successfully.");
-        //         // define a new table 'users'
-        //         this.User = this.sequelize.define("users", {
-        //           username: {
-        //             type: Sequelize.STRING
-        //           },
-        //         });
-
-        //         this.User.sync()
       })
       .catch(err => {
         console.log("Unable to connect to the database: ", err);
@@ -58,13 +50,17 @@ module.exports = class Db {
     });
   }
 
-  async findAll(tableProperty) {
-    return await this[tableProperty].findAll().then(rows => {
-      return rows
+  findAll(tableProperty) {
+    return this[tableProperty].findAll().then(rows => {
+      return rows;
     });
   }
-  
-  async deleteOne(tableProperty, objectToFilter) {
-    this[tableProperty].findOne({ where: objectToFind }).then(row.;
+
+  deleteOne(tableProperty, objectToFilter) {
+    return this[tableProperty].findOne({ where: objectToFilter }).then(row => {
+      if (row) {
+        row.destroy();
+      }
+    });
   }
 };

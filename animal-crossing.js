@@ -11,14 +11,18 @@ module.exports = class AnimalCrossing {
 
   handleMessage(channelName, userstate, msg) {
     if (msg === "!startvillagerhunt") {
-      this._startVillagerHunt();
+      this._startVillagerHunt(channelName);
     } else if (msg.startsWith("!addvillager")) {
       const villagerName = msg.replace("!addvillager ", "").trim();
       if (villagerName !== "") {
         this._addVillager(channelName, villagerName);
       }
     } else if (msg.startsWith("!removevillager")) {
-      this._removeVillager(channelName, name);
+      const villagerName = msg.replace("!removevillager ", "").trim();
+      if (villagerName !== "") {
+        this._removeVillager(channelName, villagerName);
+      }
+      
     } else if (msg.startsWith("!showvillagers")) {
       this._viewVillagers(channelName);
     }
@@ -32,9 +36,10 @@ module.exports = class AnimalCrossing {
     });
   }
 
-  _startVillagerHunt() {
+  _startVillagerHunt(channelName) {
     this.db.resetTable("Villager");
     this._intializeVillagerTable();
+    this._viewVillagers(channelName)
   }
 
   _addVillager(channelName, name) {
@@ -42,15 +47,13 @@ module.exports = class AnimalCrossing {
     this._viewVillagers(channelName);
   }
 
-  _removeVillager(target, name) {
-    // let villagers = this.db.get("villagers").value().filter(villager => villager !== name);
-    // this.db.set("villagers", villagers).write();
-    // this.viewVillagers(target)
+  async _removeVillager(channelName, name) {
+    await this.db.deleteOne("Villager", {name : name})
+    this._viewVillagers(channelName);
   }
 
   async _viewVillagers(channelName) {
     let villagers = await this.db.findAll("Villager");
-    console.log(">>>>>>>", JSON.stringify(villagers));
     let villagerList = villagers.map(v => v.name).join(", ");
 
     this.client.say(
