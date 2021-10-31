@@ -23,14 +23,14 @@ module.exports = class Db {
       .authenticate()
       .then((err) => {
         console.log("Connection has been established successfully.");
-        // define a new table 'users'
-        this.User = this.sequelize.define("users", {
-          username: {
-            type: Sequelize.STRING
-          },
-        });
+//         // define a new table 'users'
+//         this.User = this.sequelize.define("users", {
+//           username: {
+//             type: Sequelize.STRING
+//           },
+//         });
       
-        this.User.sync()
+//         this.User.sync()
       })
       .catch((err) => {
         console.log("Unable to connect to the database: ", err);
