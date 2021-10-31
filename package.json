@@ -10,7 +10,8 @@
   "dependencies": {
     "tmi.js": "^1.8.5",
     "sqlite3": "*",
-    "sequelize": "*"
+    "sequelize": "*",
+    "babel-eslint": "*"
   },
   "engines": {
     "node": "14.x"
