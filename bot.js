@@ -19,7 +19,9 @@ module.exports = class Bot {
     this.channelsByName = new Map();
     this.channels = this.channelNames.map(name => {
       let aChannel = new Channel(name, this.client, `.data/${name.slice(1)}`);
+      console.log(`${name}`,`>>>> ${JSON.stringify(this.channelsByName)}`);
       this.channelsByName.set(name, aChannel);
+      console.log(`<<<< ${JSON.stringify(this.channelsByName)}`);
       return aChannel;
     });
 

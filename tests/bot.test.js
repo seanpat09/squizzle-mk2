@@ -15,7 +15,7 @@ describe("Bot", () => {
     describe("channel registration", () => {
       test("it should construct new tmi client with channel configuration for each channel", () => {
         const squizzlebot = new Bot();
-        const expectedChannels = ["squizzleflip", "squizzle_mk2"];
+        const expectedChannels = ["#squizzleflip", "#squizzle_mk2"];
         const expectedOptions = {
           channels: expectedChannels,
           identity: { password: "fakeoauthtoken", username: "fakebotname" }
