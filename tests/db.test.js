@@ -5,11 +5,17 @@ jest.mock("sequelize");
 
 describe("Db", () => {
   let db;
+  let mockSequelizeTable = {
+     sync: jest.fn(), 
+  };
+  let defineMock = jest.fn(() => mockSequelizeTable);
+  
 
   beforeEach(() => {
     const mockAuthenticate = jest.fn();
     mockAuthenticate.mockResolvedValue();
     Sequelize.prototype.authenticate = mockAuthenticate;
+    Sequelize.prototype.define = defineMock;
   });
 
   afterEach(() => {
@@ -36,5 +42,12 @@ describe("Db", () => {
         }
       );
     });
+  });
+  
+  describe("defineTable", () => {
+    it("should define a table ", () => {
+      
+    })
+    
   });
 });
