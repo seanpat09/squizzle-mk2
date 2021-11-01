@@ -55,9 +55,18 @@ describe("Db", () => {
       }
       db.defineTable(propertyName,tableName, columns)
       
-      expect(defineMock).toBeCalledWith(propertyName, tableName, columns);
-      expect(mockSequelizeTable).toBeCalled();
+      expect(defineMock).toBeCalledWith(tableName, columns);
+      expect(mockSequelizeTable.sync).toBeCalled();
+      expect(db[propertyName]).toBe(mockSequelizeTable)
     })
+  });
+  
+  describe("create", () => {
+      db = new Db(mockFileName);
+      db.TestProperty = 
     
+      create(tableProperty, row) {
+    this[tableProperty].create(row);
+  }
   });
 });
