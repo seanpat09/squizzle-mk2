@@ -40,6 +40,10 @@ describe("Db", () => {
           storage: mockFileName
         }
       );
+      
+      test("constructor should authenticate to database", () => {
+        
+      })
     });
   });
   
