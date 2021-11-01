@@ -4,7 +4,7 @@ const Channel = require("./channel.js");
 
 module.exports = class Bot {
   constructor() {
-    this.channelNames = ["squizzleflip", "squizzle_mk2"];
+    this.channelNames = ["squizzleflip", "squizzle_mk2", "pighog8"];
 
     this.opts = {
       identity: {
@@ -66,6 +66,9 @@ module.exports = class Bot {
       .enableAddOn(Channel.ANIMAL_CROSSING);
     this.channelsByName
       .get("#squizzle_mk2")
+      .enableAddOn(Channel.ANIMAL_CROSSING);
+    this.channelsByName
+      .get("#pighog8")
       .enableAddOn(Channel.ANIMAL_CROSSING);
   }
 };
