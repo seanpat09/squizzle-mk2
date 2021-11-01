@@ -24,7 +24,6 @@ describe("Db", () => {
 
   describe("constructor", () => {
     test("constructor registration should instantiate with a client", () => {
-      const mockFileName = ".test/testfile";
       db = new Db(mockFileName);
       expect(Sequelize).toBeCalledWith(
         "database",
@@ -45,8 +44,19 @@ describe("Db", () => {
   });
   
   describe("defineTable", () => {
-    it("should define a table ", () => {
+    test.only("should define a table ", () => {
+      db = new Db(mockFileName);
+      let propertyName = "testPropertyName"
+      let tableName = "testTableName";
+      let columns = {
+        test: {
+          type: this.db.STRING_TYPE
+        }
+      }
+      db.defineTable(propertyName,tableName, columns)
       
+      expect(defineMock).toBeCalledWith(propertyName, tableName, columns);
+      expect(mockSequelizeTable).toBeCalled();
     })
     
   });
