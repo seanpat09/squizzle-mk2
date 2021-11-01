@@ -9,7 +9,7 @@ describe("Db", () => {
      sync: jest.fn(), 
   };
   let defineMock = jest.fn(() => mockSequelizeTable);
-  
+  const mockFileName = ".test/testfile";
 
   beforeEach(() => {
     const mockAuthenticate = jest.fn();
@@ -50,7 +50,7 @@ describe("Db", () => {
       let tableName = "testTableName";
       let columns = {
         test: {
-          type: this.db.STRING_TYPE
+          type: db.STRING_TYPE
         }
       }
       db.defineTable(propertyName,tableName, columns)
