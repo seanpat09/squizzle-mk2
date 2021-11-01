@@ -69,13 +69,14 @@ describe("Db", () => {
 
   describe("database actions", () => {
     let mockTable;
-    let mockRows = [{ name: "Test Row" }];
+    let mockRows = [{ name: "Test Row", destroy: jest.fn().mockResolvedValue() }];
 
     beforeEach(() => {
       mockTable = {
         create: jest.fn(),
         destroy: jest.fn(),
-        findAll: jest.fn().mockResolvedValue(mockRows)
+        findAll: jest.fn().mockResolvedValue(mockRows),
+        findOne: jest.fn()
       };
       db = new Db(mockFileName);
       db.TestProperty = mockTable;
@@ -85,13 +86,13 @@ describe("Db", () => {
       test("should create a row on the specified table with the passed in data", () => {
         const mockRow = { name: "testname" };
         db.create("TestProperty", mockRow);
-        expect(mockTable.create).toBeCalledWith("TestProperty", mockRow);
+        expect(mockTable.create).toBeCalledWith(mockRow);
       });
     });
 
     describe("resetTable", () => {
       test("should clear out specified table", () => {
-        db.destroy("TestProperty");
+        db.resetTable("TestProperty");
         expect(mockTable.destroy).toBeCalledWith({
           where: {},
           truncate: true
@@ -105,7 +106,26 @@ describe("Db", () => {
         expect(mockTable.findAll).toBeCalled();
         expect(returnedRows).toBe(mockRows);
       });
-      
     });
+
+    describe("deleteOne", () => {
+      describe("nothing is found", () => {
+        test("it should not try to delete anything", async () => {
+          mockTable.findOne.mockResolvedValue(null);
+          await db.deleteOne("TestProperty", "Filter");
+          expect(mockTable.findOne).toBeCalledWith({ where : "Filter" });
+          expect(mockRows[0].destroy).not.toBeCalled();
+        });
+      });
+      
+      describe("a row is found", () => {
+        test("it should delete the row", async () => {
+          mockTable.findOne.mockResolvedValue(mockRows[0]);
+          await db.deleteOne("TestProperty", "Filter");
+          expect(mockTable.findOne).toBeCalledWith({ where : "Filter" });
+          expect(mockRows[0].destroy).toBeCalled();
+        });
+      });
+    })
   });
 });
