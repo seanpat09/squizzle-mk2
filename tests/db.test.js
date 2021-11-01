@@ -67,21 +67,45 @@ describe("Db", () => {
     });
   });
 
-  describe("create", () => {
-    let mockTable = {
-      create: jest.fn()
-    }
-    
-    const mockRow = { name: "testname" };
-    
-    db = new Db(mockFileName);
-    db.TestProperty = mockTable;
-    
-    db.create("TestProperty", mockRow);
-    expect(mockTable.create).toBeCalledWith("TestProperty", mockRow);
-  });
-  
-  describe("resetTable", () => {
-    
+  describe("database actions", () => {
+    let mockTable;
+    let mockRows = [{ name: "Test Row" }];
+
+    beforeEach(() => {
+      mockTable = {
+        create: jest.fn(),
+        destroy: jest.fn(),
+        findAll: jest.fn().mockResolvedValue(mockRows)
+      };
+      db = new Db(mockFileName);
+      db.TestProperty = mockTable;
+    });
+
+    describe("create", () => {
+      test("should create a row on the specified table with the passed in data", () => {
+        const mockRow = { name: "testname" };
+        db.create("TestProperty", mockRow);
+        expect(mockTable.create).toBeCalledWith("TestProperty", mockRow);
+      });
+    });
+
+    describe("resetTable", () => {
+      test("should clear out specified table", () => {
+        db.destroy("TestProperty");
+        expect(mockTable.destroy).toBeCalledWith({
+          where: {},
+          truncate: true
+        });
+      });
+    });
+
+    describe("findAll", () => {
+      test("should find all rows for specified table", async () => {
+        const returnedRows = await db.findAll("TestProperty");
+        expect(mockTable.findAll).toBeCalled();
+        expect(returnedRows).toBe(mockRows);
+      });
+      
+    });
   });
 });
