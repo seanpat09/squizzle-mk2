@@ -6,13 +6,14 @@ jest.mock("sequelize");
 describe("Db", () => {
   let db;
   let mockSequelizeTable = {
-     sync: jest.fn(), 
+    sync: jest.fn()
   };
   let defineMock = jest.fn(() => mockSequelizeTable);
   const mockFileName = ".test/testfile";
+  let mockAuthenticate;
 
   beforeEach(() => {
-    const mockAuthenticate = jest.fn();
+    mockAuthenticate = jest.fn();
     mockAuthenticate.mockResolvedValue();
     Sequelize.prototype.authenticate = mockAuthenticate;
     Sequelize.prototype.define = defineMock;
@@ -40,37 +41,47 @@ describe("Db", () => {
           storage: mockFileName
         }
       );
-      
-      test("constructor should authenticate to database", () => {
-        
-      })
+    });
+
+    test("constructor should authenticate to database", () => {
+      db = new Db(mockFileName);
+      expect(mockAuthenticate).toBeCalled();
     });
   });
-  
+
   describe("defineTable", () => {
-    test.only("should define a table ", () => {
+    test("should define a table ", () => {
       db = new Db(mockFileName);
-      let propertyName = "testPropertyName"
+      let propertyName = "testPropertyName";
       let tableName = "testTableName";
       let columns = {
         test: {
           type: db.STRING_TYPE
         }
-      }
-      db.defineTable(propertyName,tableName, columns)
-      
+      };
+      db.defineTable(propertyName, tableName, columns);
+
       expect(defineMock).toBeCalledWith(tableName, columns);
       expect(mockSequelizeTable.sync).toBeCalled();
-      expect(db[propertyName]).toBe(mockSequelizeTable)
-    })
+      expect(db[propertyName]).toBe(mockSequelizeTable);
+    });
+  });
+
+  describe("create", () => {
+    let mockTable = {
+      create: jest.fn()
+    }
+    
+    const mockRow = { name: "testname" };
+    
+    db = new Db(mockFileName);
+    db.TestProperty = mockTable;
+    
+    db.create("TestProperty", mockRow);
+    expect(mockTable.create).toBeCalledWith("TestProperty", mockRow);
   });
   
-  describe("create", () => {
-      db = new Db(mockFileName);
-      db.TestProperty = 
+  describe("resetTable", () => {
     
-      create(tableProperty, row) {
-    this[tableProperty].create(row);
-  }
   });
 });
