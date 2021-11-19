@@ -8,10 +8,11 @@
     "test": "jest"
   },
   "dependencies": {
-    "tmi.js": "^1.8.5",
-    "sqlite3": "*",
+    "babel-eslint": "*",
+    "dotenv": "^10.0.0",
     "sequelize": "*",
-    "babel-eslint": "*"
+    "sqlite3": "*",
+    "tmi.js": "^1.8.5"
   },
   "engines": {
     "node": "14.x"

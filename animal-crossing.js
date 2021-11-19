@@ -1,6 +1,5 @@
 "use strict";
 const utils = require("./utils.js");
-const Sequelize = require("sequelize");
 
 module.exports = class AnimalCrossing {
   constructor(client, db) {
@@ -40,7 +39,6 @@ module.exports = class AnimalCrossing {
 
   _startVillagerHunt(channelName) {
     this.db.resetTable("Villager");
-    this._intializeVillagerTable();
     this._viewVillagers(channelName);
   }
 

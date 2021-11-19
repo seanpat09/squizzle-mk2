@@ -1,10 +1,11 @@
 "use strict";
 const tmi = require("tmi.js");
 const Channel = require("./channel.js");
+require('dotenv').config();
 
 module.exports = class Bot {
   constructor() {
-    this.channelNames = ["squizzleflip", "squizzle_mk2", "pighog8", "eva_tobin"];
+    this.channelNames = process.env.CHANNEL_NAME.split(' ');
 
     this.opts = {
       identity: {
@@ -19,9 +20,7 @@ module.exports = class Bot {
     this.channelsByName = new Map();
     this.channels = this.channelNames.map(name => {
       let aChannel = new Channel(name, this.client, `.data/${name.slice(1)}`);
-      console.log(`${name}`,`>>>> ${JSON.stringify(this.channelsByName)}`);
       this.channelsByName.set(name, aChannel);
-      console.log(`<<<< ${JSON.stringify(this.channelsByName)}`);
       return aChannel;
     });
 
@@ -45,8 +44,6 @@ module.exports = class Bot {
         c.handleMessage(user, msg);
       }
     });
-    // Remove whitespace from chat message
-    const commandName = msg.trim();
   }
 
   // Called every time the bot connects to Twitch chat
@@ -61,17 +58,11 @@ module.exports = class Bot {
   }
 
   configureAddOns() {
-    this.channelsByName
-      .get("#squizzleflip")
-      .enableAddOn(Channel.ANIMAL_CROSSING);
-    this.channelsByName
-      .get("#squizzle_mk2")
-      .enableAddOn(Channel.ANIMAL_CROSSING);
-    this.channelsByName
-      .get("#pighog8")
-      .enableAddOn(Channel.ANIMAL_CROSSING);
-    this.channelsByName
-      .get("#eva_tobin")
-      .enableAddOn(Channel.ANIMAL_CROSSING);
+    this.channelNames.forEach(channelName => {
+      const channel =  this.channelsByName.get(channelName);
+      if(channel) {
+        channel.enableAddOn(Channel.ANIMAL_CROSSING);
+      }
+    })
   }
 };
