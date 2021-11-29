@@ -37,37 +37,115 @@ describe("Pokemon", () => {
     });
 
     describe("handling messages", () => {
+        const MOCK_WILD_POKEMON = [
+            {name: "Farfetch'd"},
+            {name: "Herdier"}
+        ];
+
+        let pokemonHandler;
+        beforeEach(() => {
+            pokemonHandler = new Pokemon(MOCK_CLIENT, MOCK_DB);
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
         describe("!addpokemon", () => {
             describe("user is mod", () => {
+                beforeEach(async () => {
+                    utils.isMod = jest.fn().mockReturnValue(true);
+                    MOCK_DB.findAll.mockReturnValue(MOCK_WILD_POKEMON);
+                    await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {}, "!addpokemon Lillipup");
+                });
                 test("should add a pokemon", () => {
-                    expect(true).toBe(false);
+                    expect(pokemonHandler.db.create).toBeCalledWith("Pokemon", {"name": "Lillipup"});
+                });
+
+                test("should display pokemon in the wild", () => {
+                    expect(pokemonHandler.db.findAll).toBeCalled();
                 });
             })
 
             describe("user is not mod", () => {
-                test("should not add a pokemon", () => {
-                    expect(true).toBe(false);
+                beforeAll(async () => {
+                    utils.isMod = jest.fn().mockReturnValue(false);
+                    MOCK_DB.findAll.mockReturnValue(MOCK_WILD_POKEMON);
+                    await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {}, "!addpokemon Lillipup");
+                });
+                test("should add a pokemon", () => {
+                    expect(pokemonHandler.db.create).not.toBeCalled();
                 });
             })
         });
 
+
+        describe("!viewwildpokemon", () => {
+            beforeEach(async () => {
+                MOCK_DB.findAll.mockReturnValue(MOCK_WILD_POKEMON);
+                await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {}, "!viewwildpokemon");
+            });
+
+            test("should display pokemon in the wild", () => {
+                expect(pokemonHandler.db.findAll).toBeCalledWith("Pokemon");
+                expect(pokemonHandler.client.say).toBeCalledWith(
+                    MOCK_CHANNEL_NAME,
+                    "The following pokemon are in the wild!: Farfetch'd, Herdier"
+                );
+            });
+        });
+
         describe("!removepokemon", () => {
             describe("user is mod", () => {
-                test("should start a pokemon encounter", () => {
-                    expect(true).toBe(false);
+                beforeEach(async () => {
+                    utils.isMod = jest.fn().mockReturnValue(true);
+                    MOCK_DB.findAll.mockReturnValue(MOCK_WILD_POKEMON);
+                    await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {}, "!removepokemon Lillipup");
+                });
+                test("should remove a pokemon", () => {
+                    expect(pokemonHandler.db.deleteOne).toBeCalledWith("Pokemon", {"name": "Lillipup"});
                 });
             })
 
             describe("user is not mod", () => {
-                test("should not start a pokemon encounter", () => {
-                    expect(true).toBe(false);
+                beforeAll(async () => {
+                    utils.isMod = jest.fn().mockReturnValue(false);
+                    MOCK_DB.findAll.mockReturnValue(MOCK_WILD_POKEMON);
+                    await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {}, "!addpokemon Lillipup");
+                });
+                test("should add a pokemon", () => {
+                    expect(pokemonHandler.db.deleteOne).not.toBeCalled();
                 });
             })
         });
 
         describe("!encounter", () => {
-            test("should start a pokemon encounter", () => {
-                expect(true).toBe(false);
+            beforeEach(async () => {
+                utils.isMod = jest.fn().mockReturnValue(true);
+                MOCK_DB.findAll.mockReturnValue([{name: "Piplup"}]);
+                await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {}, "!encounter");
+            });
+
+            test("should start a pokemon encounter by announcing pokemon", () => {
+                expect(pokemonHandler.client.say).toBeCalledWith(
+                    MOCK_CHANNEL_NAME,
+                    "A wild Piplup appeared!"
+                );
+
+                expect(pokemonHandler.encounteredPokemon).toBe("Piplup");
+
+                expect(pokemonHandler.encounterActive).toBeTruthy();
+            });
+
+            test("should not be able to start another encounter", async () => {
+                pokemonHandler.encounterActive = true;
+                await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {}, "!encounter");
+                expect(pokemonHandler.client.say).toBeCalledWith(
+                    MOCK_CHANNEL_NAME,
+                    "BOP we are already in an encounter!"
+                );
+
+                expect(pokemonHandler.db.findAll).toBeCalledTimes(1);
             });
         });
 
