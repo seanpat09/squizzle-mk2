@@ -2,12 +2,14 @@
 const utils = require("./utils.js");
 
 module.exports = class Pokemon {
+  static MISS_RATE = .95;
   constructor(client, db) {
     this.client = client;
     this.db = db;
     this._intializePokemonTable();
     this.encounterActive = false;
     this.encounteredPokemon = undefined;
+    this.currentTrainers = new Set();
   }
 
   handleMessage(channelName, userstate, msg) {
@@ -27,6 +29,8 @@ module.exports = class Pokemon {
       if (utils.isMod(userstate, channelName)) {
         this._startEncounter(channelName);
       }
+    } else if (msg === "!pokeball") {
+      this._pokeball(channelName, userstate);
     }
   }
 
@@ -51,6 +55,17 @@ module.exports = class Pokemon {
     }
   }
 
+  _pokeball(channelName, userstate) {
+    if(this.encounterActive) {
+      this.currentTrainers.add(userstate.username)
+    } else {
+      this.client.say(
+        channelName,
+        "BOP BOP BOP You can't use that right now!"
+      )
+    }
+  }
+
   async _startEncounter(channelName) {
     if(this.encounterActive) {
       this.client.say(
@@ -66,6 +81,27 @@ module.exports = class Pokemon {
       channelName,
       `A wild ${this.encounteredPokemon} appeared!`
     );
+
+    setTimeout(() => {
+      this.encounterActive = false;
+      let chance = (1 - Math.pow(Pokemon.MISS_RATE, this.currentTrainers.size)) * 100;
+      let roll = Math.floor(Math.random() * 100);
+      let isCaught = chance > roll;
+      if(isCaught) {
+        this.client.say(
+          channelName,
+          `The community threw ${this.currentTrainers.size} pokeballs. We caught ${this.encounteredPokemon}!`
+        )
+      } else {
+        this.client.say(
+          channelName,
+          `The community threw ${this.currentTrainers.size} pokeballs. ${this.encounteredPokemon} got away!`
+        )
+
+        this.encounteredPokemon = null;
+        this.currentTrainers = new Set();
+      }
+    }, 6000)
   }
 
   async _viewWildPokemon(channelName) {

@@ -1,5 +1,6 @@
 const Pokemon = require(".././pokemon.js");
 const utils = require(".././utils.js");
+const { POKEMON } = require("../channel.js");
 
 const MOCK_CLIENT = {
     say: jest.fn()
@@ -120,6 +121,7 @@ describe("Pokemon", () => {
         });
 
         describe("!encounter", () => {
+            jest.useFakeTimers();
             beforeEach(async () => {
                 utils.isMod = jest.fn().mockReturnValue(true);
                 MOCK_DB.findAll.mockReturnValue([{name: "Piplup"}]);
@@ -147,21 +149,61 @@ describe("Pokemon", () => {
 
                 expect(pokemonHandler.db.findAll).toBeCalledTimes(1);
             });
+
+            test("should end encounter after 60 seconds", () => {
+                jest.runAllTimers();
+                expect(pokemonHandler.encounterActive).toBeFalsy();
+            });
+
+            describe("pokemon is caught", () => {
+                test("should announce that pokemon was caught", async () => {
+                    Pokemon.MISS_RATE = 0;
+                    await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {username: "squizzle"}, "!pokeball");
+                    jest.runAllTimers();
+                    expect(pokemonHandler.client.say).toBeCalledWith(
+                        MOCK_CHANNEL_NAME,
+                        "The community threw 1 pokeballs. We caught Piplup!"
+                    );
+                })
+            });
+
+            describe("pokemon is not caught", () => {
+                test("should announce that pokemon was caught", async () => {
+                    Pokemon.MISS_RATE = 1;
+                    await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {username: "squizzle"}, "!pokeball");
+                    jest.runAllTimers();
+                    expect(pokemonHandler.client.say).toBeCalledWith(
+                        MOCK_CHANNEL_NAME,
+                        "The community threw 1 pokeballs. Piplup got away!"
+                    );
+                })
+            });
         });
 
         describe("!pokeball", () => {
             describe("encounter is active", () => {
+                beforeEach(async () => {
+                    pokemonHandler.encounterActive = true;
+                    await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {username: "squizzle"}, "!pokeball");
+                });
+
                 test("should track that pokeball was thrown", () => {
-                    expect(true).toBe(false);
+                    expect(pokemonHandler.currentTrainers.size).toBe(1);
                 });
     
-                test("should only track one pokeball per user", () => {
-                    expect(true).toBe(false);
+                test("should only track one pokeball per user", async () => {
+                    expect(pokemonHandler.currentTrainers.size).toBe(1);
+                    await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {username: "squizzle"}, "!pokeball");
+                    expect(pokemonHandler.currentTrainers.size).toBe(1);
                 });
             })
             describe("encounter is not active", () => {
+                beforeEach(async () => {
+                    pokemonHandler.encounterActive = false;
+                    await pokemonHandler.handleMessage(MOCK_CHANNEL_NAME, {username: "squizzle"}, "!pokeball");
+                });
                 test("should notify chat that pokemon encounter is not in progress", () => {
-                    expect(true).toBe(false);
+                    expect(pokemonHandler.client.say).toBeCalledWith(MOCK_CHANNEL_NAME, "BOP BOP BOP You can't use that right now!");
                 });
             });
 
