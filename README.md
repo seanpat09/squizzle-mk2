@@ -11,3 +11,8 @@ A series of bots that can be configured to manage multiple channels.
 
 `!removevillager <villagername>` will remove a villager from the list, in case you have a typo or just added the wrong villager.  For example, you can do `!removevillager Sprocket` this will only remove one instance of that Villager
 
+`!addIsland` increments the number of islands visited and displays the latest count
+
+`!viewIslandCount` displays the number of islands visited
+
+`!setIslandCount <numIslands>` allows you to arbitrarily set the island coun. For example, you can do `!setIslandCount 10`
