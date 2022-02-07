@@ -100,7 +100,7 @@ module.exports = class AnimalCrossing {
     if(islandCount) {
       count = islandCount.count;
     } else {
-      count = 1;
+      count = 0;
       this.db.create("Count", { name: 'Island Count', count: count });
     }
 
