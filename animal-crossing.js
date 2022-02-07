@@ -29,7 +29,7 @@ module.exports = class AnimalCrossing {
       this._viewVillagers(channelName);
     } else if (msg === "!islandCount") {
       this._viewIslandCount(channelName);
-    } else if (msg === "!addIsland") {
+    } else if (msg === "!newIsland") {
       this._incrementIslandCount(channelName);
     } else if (msg.startsWith("!setIslandCount")) {
       const islandCount = msg.replace("!setIslandCount ", "").trim();
