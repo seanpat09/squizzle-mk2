@@ -4,6 +4,7 @@ const Sequelize = require("sequelize");
 module.exports = class Db {
   constructor(filename) {
     this.STRING_TYPE = Sequelize.STRING;
+    this.INTEGER_TYPE = Sequelize.INTEGER;
 
     if (!filename) {
       return;
@@ -43,6 +44,15 @@ module.exports = class Db {
     this[tableProperty].create(row);
   }
 
+  create(tableProperty, row) {
+    this[tableProperty].create(row);
+  }
+
+  update(tableProperty, what, where) {
+    this[tableProperty]
+      .update(what, where)
+  }
+
   resetTable(tableProperty) {
     this[tableProperty].destroy({
       where: {},
@@ -53,6 +63,12 @@ module.exports = class Db {
   findAll(tableProperty) {
     return this[tableProperty].findAll().then(rows => {
       return rows;
+    });
+  }
+
+  findOne(tableProperty, where) {
+    return this[tableProperty].findOne(where).then(row => {
+      return row
     });
   }
 
