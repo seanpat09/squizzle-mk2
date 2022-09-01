@@ -19,8 +19,10 @@ A series of bots that can be configured to manage multiple channels.
 
 ## Donors
 
-`!adddonor <donorname>` will add a donor to the list of donors. For example, you can do `!adddonor @squizzeflip`
+`!adddonor <donorname> <amount>` will add a donor to the list of donors with their donation amount. If they donated before, it will increment their total donations. For example, you can do `!adddonor @squizzeflip`
 
-`!donors` will list out all the donors using the message "Thank you to our donors! <list of donors>"
+`!donor <donorname>` will list out a single the donor's total donations using the message "<donor name> has donated $<total donations> so far!`);"
+
+`!donors` will list out all the donors with their total donations using the message "Thank you to our donors! <list of donors>"
 
 `!removedonor <donorname>` will remove a donor from the list. Useful for removing dupes or typos. For example, you can do `!remove @squazzeflop`
