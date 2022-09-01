@@ -15,9 +15,11 @@ module.exports = class Donors {
 
     let message = msg.toLowerCase();
     if (message.startsWith("!adddonor")) {
-      const donorName = message.replace("!adddonor ", "").trim();
-      if (donorName !== "") {
-        this._addDonor(channelName, donorName);
+      const donorInfo = message.replace("!adddonor ", "").trim();
+      if (donorInfo !== "") {
+        let messageSplit = donorInfo.split(" ");
+        if(messageSplit[0] && messageSplit[1] && !isNaN(messageSplit[1]))
+        this._addDonor(channelName, messageSplit[0], parseFloat(messageSplit[1]));
       }
     } else if (message.startsWith("!removedonor")) {
       const donorName = message.replace("!removedonor ", "").trim();
@@ -26,19 +28,41 @@ module.exports = class Donors {
       }
     } else if (message.startsWith("!donors")) {
       this._viewDonors(channelName);
-    }
+    } if (message.startsWith("!donor")) {
+        const donorName = message.replace("!donor ", "").trim();
+        if (donorName !== "") {
+          this._getDonor(channelName, donorName);
+        }
+      }
   }
 
   _intializeDonorTable() {
     this.db.defineTable("Donor", "donors", {
       name: {
         type: this.db.STRING_TYPE
+      }, 
+      total_donations: {
+        type: this.db.DOUBLE_TYPE
       }
     });
   }
 
-  _addDonor(channelName, name) {
-    this.db.create("Donor", { name: name });
+  async _addDonor(channelName, name, amount) {
+    const donor = await this.db.findOne("Donor", { where : { name: name } });
+    if(donor) {
+        donor.total_donations = donor.total_donations ? parseFloat(donor.total_donations) + amount : amount
+        await donor.save();
+    } else {
+        this.db.create("Donor", { name: name, total_donations: amount });
+    }
+  }
+
+  async _getDonor(channelName, name) {
+    const donor = await this.db.findOne("Donor", { where : { name: name } });
+    console.log(donor);
+    if(donor) {
+        this.client.say(channelName, `${donor.name} has donated $${donor.total_donations} so far!`);
+    }
   }
 
   async _removeDonor(channelName, name) {
@@ -47,7 +71,7 @@ module.exports = class Donors {
 
   async _viewDonors(channelName) {
     let donors = await this.db.findAll("Donor");
-    let donorList = donors.map(v => v.name).join(", ");
+    let donorList = donors.map(v => `${v.name} ($${v.total_donations})`).join(", ");
 
     this.client.say(
       channelName,
