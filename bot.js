@@ -62,6 +62,7 @@ module.exports = class Bot {
       const channel =  this.channelsByName.get(channelName);
       if(channel) {
         channel.enableAddOn(Channel.ANIMAL_CROSSING);
+        channel.enableAddOn(Channel.DONOR);
       }
     })
   }
