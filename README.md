@@ -16,3 +16,11 @@ A series of bots that can be configured to manage multiple channels.
 `!viewIslandCount` displays the number of islands visited
 
 `!setIslandCount <numIslands>` allows you to arbitrarily set the island coun. For example, you can do `!setIslandCount 10`
+
+## Donors
+
+`!adddonor <donorname>` will add a donor to the list of donors. For example, you can do `!adddonor @squizzeflip`
+
+`!donors` will list out all the donors using the message "Thank you to our donors! <list of donors>"
+
+`!removedonor <donorname>` will remove a donor from the list. Useful for removing dupes or typos. For example, you can do `!remove @squazzeflop`
