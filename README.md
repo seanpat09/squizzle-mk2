@@ -31,11 +31,17 @@ A series of bots that can be configured to manage multiple channels.
 A pokemon shows up every 10 minutes to be caught by the community in the next 60 seconds. There is an 5% chance that any one pokeball will catch the pokemon, so the more people that throw them, the more likely it'll get caught. 
 
 ### The math
-1 pokeball thrown - 5% catch rate
-2 pokeballs thrown - 9.8% catch rate
-3 pokeballs thrown - 14.3% catch rate
-4 pokeballs thrown - 19.6% catch rate
-4 pokeballs thrown - 23.4% catch rate
+You can calculate the catch rate with the following:
+  
+`(1 - 0.95)^ NUM_POKEBALLS`
+ 
+So with 5 Pokeballs - `(1- 0.95) ^ 5 = 0.234 or 23.4%` 
+
+* 1 pokeball thrown - 5% catch rate
+* 2 pokeballs thrown - 9.8% catch rate
+* 3 pokeballs thrown - 14.3% catch rate
+* 4 pokeballs thrown - 19.6% catch rate
+* 5 pokeballs thrown - 23.4% catch rate
 
 ### Mod only commands
 `!pokebot_on` turn pokebot. Pokemon will start showing up every 10 minutes
