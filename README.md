@@ -26,3 +26,26 @@ A series of bots that can be configured to manage multiple channels.
 `!donors` will list out all the donors with their total donations using the message "Thank you to our donors! <list of donors>"
 
 `!removedonor <donorname>` will remove a donor from the list. Useful for removing dupes or typos. For example, you can do `!remove @squazzeflop`
+
+## Pokebot
+A pokemon shows up every 10 minutes to be caught by the community in the next 60 seconds. There is an 5% chance that any one pokeball will catch the pokemon, so the more people that throw them, the more likely it'll get caught. 
+
+### The math
+1 pokeball thrown - 5% catch rate
+2 pokeballs thrown - 9.8% catch rate
+3 pokeballs thrown - 14.3% catch rate
+4 pokeballs thrown - 19.6% catch rate
+4 pokeballs thrown - 23.4% catch rate
+
+### Mod only commands
+`!pokebot_on` turn pokebot. Pokemon will start showing up every 10 minutes
+
+`!pokebot_off` deactivate pokebot. Pokemon will start showing up every 10 minutes
+
+`!encounter` manually start a pokemon encounter. If one is already in progress, the bot will tell you one has already started
+
+### Community Commands
+`!pokeball` throws a pokeball when a encounter is progress. If no encounter is progress, it let's the user know. It also let's the user know if they already threw one
+
+`!pokedex` lists all the pokemon we have already caught
+
