@@ -1,4 +1,6 @@
 const Channel = require('.././channel.js');
+const utils = require(".././utils.js");
+
 
 const MOCK_CHANNEL_NAME = "myChannel";
 const MOCK_CLIENT = {
@@ -21,6 +23,7 @@ describe("Channel", () => {
 
     describe("channel commands", () => {
       test("should be able to ping bot in channel", () => {
+        utils.isMod = jest.fn().mockReturnValue(true);
         const aChannel = new Channel(MOCK_CHANNEL_NAME, MOCK_CLIENT);
         
         aChannel.handleMessage({}, "!ping");
