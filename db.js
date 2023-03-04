@@ -61,8 +61,8 @@ module.exports = class Db {
     });
   }
 
-  findAll(tableProperty) {
-    return this[tableProperty].findAll().then(rows => {
+  findAll(tableProperty,where) {
+    return this[tableProperty].findAll(where).then(rows => {
       return rows;
     });
   }

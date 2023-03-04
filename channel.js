@@ -3,6 +3,7 @@
 const AnimalCrossing = require("./animal-crossing.js");
 const Donor = require("./donor.js");
 const Pokemon = require("./pokemon.js");
+const Guess = require("./guess.js");
 const Db = require("./db.js");
 const utils = require("./utils.js");
 
@@ -10,6 +11,7 @@ module.exports = class Channel {
   static ANIMAL_CROSSING = "animalCrossing";
   static DONOR = "donor";
   static POKEMON = "pokemon";
+  static GUESS = "guess"
 
   constructor(channelName, client, filename) {
     this.channelName = channelName;
@@ -38,6 +40,8 @@ module.exports = class Channel {
         this.addOns.push(new Donor(this.client, this.db));
       } else if (addOn === Channel.POKEMON) {
         this.addOns.push(new Pokemon(this.channelName, this.client, this.db));
+      } else if (addOn === Channel.GUESS) {
+        this.addOns.push(new Guess(this.client, this.db));
       } 
    }
     

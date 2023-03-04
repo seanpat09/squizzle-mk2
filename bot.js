@@ -64,6 +64,7 @@ module.exports = class Bot {
         channel.enableAddOn(Channel.ANIMAL_CROSSING);
         channel.enableAddOn(Channel.DONOR);
         channel.enableAddOn(Channel.POKEMON);
+        channel.enableAddOn(Channel.GUESS);
       }
     })
   }
