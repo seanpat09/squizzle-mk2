@@ -26,7 +26,7 @@ module.exports = class Guess {
         this._getWinners(channelName, winningGuess);
       }
     } else if (message === "!endguess" && utils.isMod(userstate, channelName)) {
-      this._endGuess();
+      this._endGuess(channelName);
     }
   }
 
@@ -67,7 +67,8 @@ module.exports = class Guess {
     this.client.say(channelName, `Congrats to our winners ${winnerList}`);
   }
 
-  async _endGuess() {
+  async _endGuess(channelName) {
+    this.client.say(channelName, `Step on up, use the command !guess and guess the playthrough time and win a prize! Just type !guess and your guess, simple as typing !guess 1:57`);
     this.db.resetTable("Guess");
   }
 };
